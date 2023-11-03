@@ -3,7 +3,7 @@ import json
 from mongodb import client
 from telebot.async_telebot import AsyncTeleBot
 client.restore()
-bot = AsyncTeleBot("5567350822:AAEQxTdUbYqqjeKxqsoAHrLNG5tkqkwNeMY")
+bot = AsyncTeleBot("5567350822:AAFvaj8rMvXF1BEelsjpzbgXy7gaoRq2LCc")
 
 
 # Handle '/start' and '/help'
@@ -18,8 +18,10 @@ async def echo_message(message):
     print(message)
     text = message.text
     dct = json.loads(text)
-    dataset = f"{client.get_data_to_db(dct)}"
-    await bot.reply_to(message, dataset)
+    data = client.get_data_to_db(dct)
+    dataset = json.dumps(data)
+
+    await bot.send_message(message.chat.id, dataset)
 
 
 asyncio.run(bot.polling())

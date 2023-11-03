@@ -60,7 +60,7 @@ def get_data_to_db(dct):
                 "dataset": {
                     "$push": "$values"
                 },
-                "label": {
+                "labels": {
                     "$push": "$_id"
                 }
             }
