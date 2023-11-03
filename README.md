@@ -1,4 +1,5 @@
-# telegramm-mongo-botТестовое задание junior python developer
+# telegramm-mongo-bot
+Тестовое задание junior python developer
 Время на выполнение: 4-6 часов
 Стек: Python3, Asyncio, MongoDB, любая асинхронная библиотека для телеграм бота
 
