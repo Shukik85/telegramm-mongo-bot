@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from pymongo import MongoClient
+from pymongo.errors import BulkWriteError
 import bson
 
 
@@ -97,7 +98,7 @@ def restore():
                     db[coll.split('.')[0]].insert_many(
                         bson.decode_all(f.read()))
                     print("Ok!")
-                except:
+                except BulkWriteError:
                     pass
 
 
