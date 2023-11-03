@@ -29,14 +29,14 @@ def get_data_to_db(dct):
     pipeline = [
         {
             "$match": {
-              "$or": [
-                {
-                  "dt": {
-                    "$gte": dt_from,
-                    "$lte": dt_upto
-                  }
-                },
-              ]
+                "$or": [
+                    {
+                        "dt": {
+                            "$gte": dt_from,
+                            "$lte": dt_upto
+                        }
+                    },
+                ]
             }
         },
         {
@@ -70,7 +70,8 @@ def get_data_to_db(dct):
     print(pipeline)
     collection = None
     with client.start_session(snapshot=True) as session:
-        collection = collections.aggregate(pipeline=pipeline, session=session).try_next()
+        collection = collections.aggregate(
+            pipeline=pipeline, session=session).try_next()
     return collection
 
 
