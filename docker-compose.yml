@@ -1,0 +1,70 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+name: bot
+
+volumes:
+  mongo_data:
+  mongo_dump:
+
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--shardsvr",
+        "--port",
+        "27017",
+        "--replSet",
+        "rs0",
+        "--bind_ip_all"
+      ]
+
+  mongosetup:
+    build: "./mongo_setup"
+    depends_on:
+      - mongo
+
+  mongo-express:
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/?replicaSet=rs0
+    ports:
+      - 8081:8081
+    restart: always
+    depends_on:
+      - mongo
+      - mongosetup
+
+  bot:
+    build: "./mongo_bot"
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - mongo_dump:/home/app/bot/dump/
+    command: gunicorn wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    depends_on:
+      - mongo
+      - mongosetup
+
+  nginx:
+    build: "./nginx"
+    restart: always
+    ports:
+      - 80:80
+      - 443:80
+    depends_on:
+      - bot
