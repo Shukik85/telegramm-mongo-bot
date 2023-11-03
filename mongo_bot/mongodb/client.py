@@ -44,6 +44,7 @@ def get_data_to_db(dct):
             "$group": {
                 "_id": {
                     "$dateToString": {
+                        "format": "%Y-%m-%dT%H:%M:%S",
                         "date": {
                             "$dateTrunc": {
                                 "date": "$dt", "unit": group_type, "binSize": 1
